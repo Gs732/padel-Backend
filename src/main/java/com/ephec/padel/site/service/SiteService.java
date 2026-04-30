@@ -28,6 +28,14 @@ public Site creerSite(Site site) {
     return siteRepository.save(site);
 }
 
+public Site modifierSite(Long id, Site site) {
+        if (!siteRepository.existsById(id)) {
+            throw new RuntimeException("Site introuvable avec id : " + id);
+        }
+        site.setId(id);
+        return siteRepository.save(site);
+    }
+
 public void supprimerSite(Long id) {
     if (!siteRepository.existsById(id)) {
         throw new RuntimeException(new RuntimeException("Site introuvable avec id : " + id));
