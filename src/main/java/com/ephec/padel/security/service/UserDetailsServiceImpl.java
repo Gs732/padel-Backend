@@ -9,7 +9,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import com.ephec.padel.security.model.User;
+import org.springframework.security.core.userdetails.User;
 
 @Service
 public class UserDetailsServiceImpl implements UserDetailsService {
