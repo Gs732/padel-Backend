@@ -1,0 +1,101 @@
+[ERROR] COMPILATION ERROR : 
+[ERROR] /D:/Padel/padel-Backend-main/padel-Backend-main/src/test/java/com/ephec/padel/terrain/TerrainControllerTest.java:[12,63] package org.springframework.boot.test.autoconfigure.web.servlet does not exist
+[ERROR] /D:/Padel/padel-Backend-main/padel-Backend-main/src/test/java/com/ephec/padel/terrain/TerrainControllerTest.java:[14,50] package org.springframework.boot.test.mock.mockito does not exist
+[ERROR] /D:/Padel/padel-Backend-main/padel-Backend-main/src/test/java/com/ephec/padel/terrain/TerrainControllerTest.java:[29,2] cannot find symbol
+  symbol: class AutoConfigureMockMvc
+[ERROR] /D:/Padel/padel-Backend-main/padel-Backend-main/src/test/java/com/ephec/padel/site/SiteControllerTest.java:[12,63] package org.springframework.boot.test.autoconfigure.web.servlet does not exist
+[ERROR] /D:/Padel/padel-Backend-main/padel-Backend-main/src/test/java/com/ephec/padel/site/SiteControllerTest.java:[14,50] package org.springframework.boot.test.mock.mockito does not exist
+[ERROR] /D:/Padel/padel-Backend-main/padel-Backend-main/src/test/java/com/ephec/padel/site/SiteControllerTest.java:[29,2] cannot find symbol
+  symbol: class AutoConfigureMockMvc
+[ERROR] /D:/Padel/padel-Backend-main/padel-Backend-main/src/test/java/com/ephec/padel/reservation/ReservationControllerTest.java:[13,63] package org.springframework.boot.test.autoconfigure.web.servlet does not exist
+[ERROR] /D:/Padel/padel-Backend-main/padel-Backend-main/src/test/java/com/ephec/padel/reservation/ReservationControllerTest.java:[15,50] package org.springframework.boot.test.mock.mockito does not exist
+[ERROR] /D:/Padel/padel-Backend-main/padel-Backend-main/src/test/java/com/ephec/padel/reservation/ReservationControllerTest.java:[30,2] cannot find symbol
+  symbol: class AutoConfigureMockMvc
+[ERROR] /D:/Padel/padel-Backend-main/padel-Backend-main/src/test/java/com/ephec/padel/membre/MembreControllerTest.java:[12,63] package org.springframework.boot.test.autoconfigure.web.servlet does not exist
+[ERROR] /D:/Padel/padel-Backend-main/padel-Backend-main/src/test/java/com/ephec/padel/membre/MembreControllerTest.java:[14,50] package org.springframework.boot.test.mock.mockito does not exist
+[ERROR] /D:/Padel/padel-Backend-main/padel-Backend-main/src/test/java/com/ephec/padel/membre/MembreControllerTest.java:[25,2] cannot find symbol
+  symbol: class AutoConfigureMockMvc
+[ERROR] /D:/Padel/padel-Backend-main/padel-Backend-main/src/test/java/com/ephec/padel/terrain/TerrainControllerTest.java:[38,6] cannot find symbol
+  symbol:   class MockBean
+  location: class com.ephec.padel.terrain.TerrainControllerTest
+[ERROR] /D:/Padel/padel-Backend-main/padel-Backend-main/src/test/java/com/ephec/padel/terrain/TerrainControllerTest.java:[41,6] cannot find symbol
+  symbol:   class MockBean
+  location: class com.ephec.padel.terrain.TerrainControllerTest
+[ERROR] /D:/Padel/padel-Backend-main/padel-Backend-main/src/test/java/com/ephec/padel/terrain/TerrainControllerTest.java:[44,6] cannot find symbol
+  symbol:   class MockBean
+  location: class com.ephec.padel.terrain.TerrainControllerTest
+[ERROR] /D:/Padel/padel-Backend-main/padel-Backend-main/src/test/java/com/ephec/padel/site/SiteControllerTest.java:[38,6] cannot find symbol
+  symbol:   class MockBean
+  location: class com.ephec.padel.site.SiteControllerTest
+[ERROR] /D:/Padel/padel-Backend-main/padel-Backend-main/src/test/java/com/ephec/padel/site/SiteControllerTest.java:[41,6] cannot find symbol
+  symbol:   class MockBean
+  location: class com.ephec.padel.site.SiteControllerTest
+[ERROR] /D:/Padel/padel-Backend-main/padel-Backend-main/src/test/java/com/ephec/padel/site/SiteControllerTest.java:[44,6] cannot find symbol
+  symbol:   class MockBean
+  location: class com.ephec.padel.site.SiteControllerTest
+[ERROR] /D:/Padel/padel-Backend-main/padel-Backend-main/src/test/java/com/ephec/padel/reservation/ReservationControllerTest.java:[39,6] cannot find symbol
+  symbol:   class MockBean
+  location: class com.ephec.padel.reservation.ReservationControllerTest
+[ERROR] /D:/Padel/padel-Backend-main/padel-Backend-main/src/test/java/com/ephec/padel/reservation/ReservationControllerTest.java:[42,6] cannot find symbol
+  symbol:   class MockBean
+  location: class com.ephec.padel.reservation.ReservationControllerTest
+[ERROR] /D:/Padel/padel-Backend-main/padel-Backend-main/src/test/java/com/ephec/padel/reservation/ReservationControllerTest.java:[45,6] cannot find symbol
+  symbol:   class MockBean
+  location: class com.ephec.padel.reservation.ReservationControllerTest
+[ERROR] /D:/Padel/padel-Backend-main/padel-Backend-main/src/test/java/com/ephec/padel/membre/MembreControllerTest.java:[34,6] cannot find symbol
+  symbol:   class MockBean
+  location: class com.ephec.padel.membre.MembreControllerTest
+[ERROR] Failed to execute goal org.apache.maven.plugins:maven-compiler-plugin:3.11.0:testCompile (default-testCompile) on project padel: Compilation failure: Compilation failure: 
+[ERROR] /D:/Padel/padel-Backend-main/padel-Backend-main/src/test/java/com/ephec/padel/terrain/TerrainControllerTest.java:[12,63] package org.springframework.boot.test.autoconfigure.web.servlet does not exist
+[ERROR] /D:/Padel/padel-Backend-main/padel-Backend-main/src/test/java/com/ephec/padel/terrain/TerrainControllerTest.java:[14,50] package org.springframework.boot.test.mock.mockito does not exist
+[ERROR] /D:/Padel/padel-Backend-main/padel-Backend-main/src/test/java/com/ephec/padel/terrain/TerrainControllerTest.java:[29,2] cannot find symbol
+[ERROR]   symbol: class AutoConfigureMockMvc
+[ERROR] /D:/Padel/padel-Backend-main/padel-Backend-main/src/test/java/com/ephec/padel/site/SiteControllerTest.java:[12,63] package org.springframework.boot.test.autoconfigure.web.servlet does not exist
+[ERROR] /D:/Padel/padel-Backend-main/padel-Backend-main/src/test/java/com/ephec/padel/site/SiteControllerTest.java:[14,50] package org.springframework.boot.test.mock.mockito does not exist
+[ERROR] /D:/Padel/padel-Backend-main/padel-Backend-main/src/test/java/com/ephec/padel/site/SiteControllerTest.java:[29,2] cannot find symbol
+[ERROR]   symbol: class AutoConfigureMockMvc
+[ERROR] /D:/Padel/padel-Backend-main/padel-Backend-main/src/test/java/com/ephec/padel/reservation/ReservationControllerTest.java:[13,63] package org.springframework.boot.test.autoconfigure.web.servlet does not exist
+[ERROR] /D:/Padel/padel-Backend-main/padel-Backend-main/src/test/java/com/ephec/padel/reservation/ReservationControllerTest.java:[15,50] package org.springframework.boot.test.mock.mockito does not exist
+[ERROR] /D:/Padel/padel-Backend-main/padel-Backend-main/src/test/java/com/ephec/padel/reservation/ReservationControllerTest.java:[30,2] cannot find symbol
+[ERROR]   symbol: class AutoConfigureMockMvc
+[ERROR] /D:/Padel/padel-Backend-main/padel-Backend-main/src/test/java/com/ephec/padel/membre/MembreControllerTest.java:[12,63] package org.springframework.boot.test.autoconfigure.web.servlet does not exist
+[ERROR] /D:/Padel/padel-Backend-main/padel-Backend-main/src/test/java/com/ephec/padel/membre/MembreControllerTest.java:[14,50] package org.springframework.boot.test.mock.mockito does not exist
+[ERROR] /D:/Padel/padel-Backend-main/padel-Backend-main/src/test/java/com/ephec/padel/membre/MembreControllerTest.java:[25,2] cannot find symbol
+[ERROR]   symbol: class AutoConfigureMockMvc
+[ERROR] /D:/Padel/padel-Backend-main/padel-Backend-main/src/test/java/com/ephec/padel/terrain/TerrainControllerTest.java:[38,6] cannot find symbol
+[ERROR]   symbol:   class MockBean
+[ERROR]   location: class com.ephec.padel.terrain.TerrainControllerTest
+[ERROR] /D:/Padel/padel-Backend-main/padel-Backend-main/src/test/java/com/ephec/padel/terrain/TerrainControllerTest.java:[41,6] cannot find symbol
+[ERROR]   symbol:   class MockBean
+[ERROR]   location: class com.ephec.padel.terrain.TerrainControllerTest
+[ERROR] /D:/Padel/padel-Backend-main/padel-Backend-main/src/test/java/com/ephec/padel/terrain/TerrainControllerTest.java:[44,6] cannot find symbol
+[ERROR]   symbol:   class MockBean
+[ERROR]   location: class com.ephec.padel.terrain.TerrainControllerTest
+[ERROR] /D:/Padel/padel-Backend-main/padel-Backend-main/src/test/java/com/ephec/padel/site/SiteControllerTest.java:[38,6] cannot find symbol
+[ERROR]   symbol:   class MockBean
+[ERROR]   location: class com.ephec.padel.site.SiteControllerTest
+[ERROR] /D:/Padel/padel-Backend-main/padel-Backend-main/src/test/java/com/ephec/padel/site/SiteControllerTest.java:[41,6] cannot find symbol
+[ERROR]   symbol:   class MockBean
+[ERROR]   location: class com.ephec.padel.site.SiteControllerTest
+[ERROR] /D:/Padel/padel-Backend-main/padel-Backend-main/src/test/java/com/ephec/padel/site/SiteControllerTest.java:[44,6] cannot find symbol
+[ERROR]   symbol:   class MockBean
+[ERROR]   location: class com.ephec.padel.site.SiteControllerTest
+[ERROR] /D:/Padel/padel-Backend-main/padel-Backend-main/src/test/java/com/ephec/padel/reservation/ReservationControllerTest.java:[39,6] cannot find symbol
+[ERROR]   symbol:   class MockBean
+[ERROR]   location: class com.ephec.padel.reservation.ReservationControllerTest
+[ERROR] /D:/Padel/padel-Backend-main/padel-Backend-main/src/test/java/com/ephec/padel/reservation/ReservationControllerTest.java:[42,6] cannot find symbol
+[ERROR]   symbol:   class MockBean
+[ERROR]   location: class com.ephec.padel.reservation.ReservationControllerTest
+[ERROR] /D:/Padel/padel-Backend-main/padel-Backend-main/src/test/java/com/ephec/padel/reservation/ReservationControllerTest.java:[45,6] cannot find symbol
+[ERROR]   symbol:   class MockBean
+[ERROR]   location: class com.ephec.padel.reservation.ReservationControllerTest
+[ERROR] /D:/Padel/padel-Backend-main/padel-Backend-main/src/test/java/com/ephec/padel/membre/MembreControllerTest.java:[34,6] cannot find symbol
+[ERROR]   symbol:   class MockBean
+[ERROR]   location: class com.ephec.padel.membre.MembreControllerTest
+[ERROR] -> [Help 1]
+[ERROR] 
+[ERROR] To see the full stack trace of the errors, re-run Maven with the -e switch.
+[ERROR] Re-run Maven using the -X switch to enable full debug logging.
+[ERROR] 
+[ERROR] For more information about the errors and possible solutions, please read the following articles:
+[ERROR] [Help 1] http://cwiki.apache.org/confluence/display/MAVEN/MojoFailureException

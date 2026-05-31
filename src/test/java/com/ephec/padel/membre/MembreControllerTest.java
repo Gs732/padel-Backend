@@ -7,30 +7,39 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import java.util.List;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.MediaType;
-import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import com.ephec.padel.membre.controller.MembreController;
 import com.ephec.padel.membre.model.Membre;
 import com.ephec.padel.membre.service.MembreService;
 
-import tools.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
-@WebMvcTest(MembreController.class)
+@ExtendWith(MockitoExtension.class)
 class MembreControllerTest {
 
-    @Autowired
-    private MockMvc mockMvc;
+    @InjectMocks
+    private MembreController membreController;
 
-    @Autowired
+    @Mock
+    private MembreService membreService;
+
+    private MockMvc mockMvc;
     private ObjectMapper objectMapper;
 
-    @MockitoBean
-    private MembreService membreService;
+    @BeforeEach
+    void setUp() {
+        mockMvc = MockMvcBuilders.standaloneSetup(membreController).build();
+        objectMapper = new ObjectMapper();
+    }
 
     // -------------------------------------------------------
     // GET /api/membres
