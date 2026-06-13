@@ -47,8 +47,10 @@ class MembreControllerTest {
     @Test
     void getAllMembres_should_return_200_with_list() throws Exception {
         // Arrange
-        Membre m1 = new Membre(1L, "Sako", "Georges", "g@gmail.com", "0467", 10.0, true);
-        Membre m2 = new Membre(2L, "Doe", "John", "j@gmail.com", "0477", 5.0, true);
+        //Membre m1 = new Membre(1L, "Sako", "Georges", "g@gmail.com", "0467", 10.0, true);
+        Membre m1 = new Membre(1L, "G0001", "Sako", "Georges", "g@gmail.com", "0467", 10.0, true, Membre.TypeMembre.GLOBAL);
+        Membre m2 = new Membre(2L, "S0001", "Doe", "John", "j@gmail.com", "0477", 5.0, true, Membre.TypeMembre.SITE);
+        // Membre m2 = new Membre(2L, "Doe", "John", "j@gmail.com", "0477", 5.0, true);
         when(membreService.getAllMembres()).thenReturn(List.of(m1, m2));
 
         // Act & Assert
@@ -65,7 +67,7 @@ class MembreControllerTest {
     @Test
     void getMembreById_should_return_200_when_exists() throws Exception {
         // Arrange
-        Membre m = new Membre(1L, "Sako", "Georges", "g@gmail.com", "0467", 10.0, true);
+        Membre m = new Membre(1L, "G0001", "Sako", "Georges", "g@gmail.com", "0467", 10.0, true, Membre.TypeMembre.GLOBAL);
         when(membreService.getMembreById(1L)).thenReturn(m);
 
         // Act & Assert
@@ -81,8 +83,8 @@ class MembreControllerTest {
     @Test
     void creerMembre_should_return_201_with_membre() throws Exception {
         // Arrange
-        Membre m = new Membre(null, "Sako", "Georges", "g@gmail.com", "0467", 10.0, true);
-        Membre saved = new Membre(1L, "Sako", "Georges", "g@gmail.com", "0467", 10.0, true);
+        Membre m = new Membre(null, null, "Sako", "Georges", "g@gmail.com", "0467", 10.0, true, Membre.TypeMembre.GLOBAL);
+        Membre saved = new Membre(1L, "G0001", "Sako", "Georges", "g@gmail.com", "0467", 10.0, true, Membre.TypeMembre.GLOBAL);
         when(membreService.creerMembre(any(Membre.class))).thenReturn(saved);
 
         // Act & Assert

@@ -23,6 +23,10 @@ import com.ephec.padel.reservation.model.Reservation;
 import com.ephec.padel.reservation.service.ReservationService;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import com.fasterxml.jackson.databind.SerializationFeature;
 
 @ExtendWith(MockitoExtension.class)
 class ReservationControllerTest {
@@ -37,10 +41,12 @@ class ReservationControllerTest {
     private ObjectMapper objectMapper;
 
     @BeforeEach
-    void setUp() {
-        mockMvc = MockMvcBuilders.standaloneSetup(reservationController).build();
-        objectMapper = new ObjectMapper();
-    }
+void setUp() {
+    mockMvc = MockMvcBuilders.standaloneSetup(reservationController).build();
+    objectMapper = new ObjectMapper();
+    objectMapper.registerModule(new JavaTimeModule()); // ← ajoute cette ligne
+    objectMapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS); // ← et celle-ci
+}
 
     private final LocalDateTime debut = LocalDateTime.of(2026, 6, 1, 10, 0);
     private final LocalDateTime fin   = LocalDateTime.of(2026, 6, 1, 11, 0);

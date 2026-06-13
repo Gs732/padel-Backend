@@ -32,8 +32,8 @@ class MembreServiceTest {
     @Test
     void getAllMembres_should_return_all_membres() {
         // Arrange
-        Membre m1 = new Membre(1L, "Sako", "Georges", "g@gmail.com", "0467", 10.0, true);
-        Membre m2 = new Membre(2L, "Doe", "John", "j@gmail.com", "0477", 5.0, true);
+        Membre m1 = new Membre(1L, "G0001", "Sako", "Georges", "g@gmail.com", "0467", 10.0, true, Membre.TypeMembre.GLOBAL);
+        Membre m2 = new Membre(2L, "S0001", "Doe", "John", "j@gmail.com", "0477", 5.0, true, Membre.TypeMembre.SITE);
         when(membreRepository.findAll()).thenReturn(List.of(m1, m2));
 
         // Act
@@ -51,7 +51,7 @@ class MembreServiceTest {
     @Test
     void getMembreById_should_return_membre_when_exists() {
         // Arrange
-        Membre m = new Membre(1L, "Sako", "Georges", "g@gmail.com", "0467", 10.0, true);
+        Membre m = new Membre(1L, "G0001", "Sako", "Georges", "g@gmail.com", "0467", 10.0, true, Membre.TypeMembre.GLOBAL);
         when(membreRepository.findById(1L)).thenReturn(Optional.of(m));
 
         // Act
@@ -81,16 +81,19 @@ class MembreServiceTest {
     @Test
     void creerMembre_should_save_and_return_membre() {
         // Arrange
-        Membre m = new Membre(null, "Sako", "Georges", "g@gmail.com", "0467", 10.0, true);
-        Membre saved = new Membre(1L, "Sako", "Georges", "g@gmail.com", "0467", 10.0, true);
-        when(membreRepository.save(m)).thenReturn(saved);
+        Membre m = new Membre(null, null, "Sako", "Georges", "g@gmail.com", "0467", 10.0, true, Membre.TypeMembre.GLOBAL);
+        Membre saved = new Membre(1L, "G0001", "Sako", "Georges", "g@gmail.com", "0467", 10.0, true, Membre.TypeMembre.GLOBAL);
+        
+        when(membreRepository.countByType(Membre.TypeMembre.GLOBAL)).thenReturn(0L);
+        when(membreRepository.save(any(Membre.class))).thenReturn(saved);
 
         // Act
         Membre result = membreService.creerMembre(m);
 
         // Assert
         assertThat(result.getId()).isEqualTo(1L);
-        verify(membreRepository, times(1)).save(m);
+        assertThat(result.getMatricule()).isEqualTo("G0001");
+        verify(membreRepository, times(1)).save(any(Membre.class));
     }
 
     // -------------------------------------------------------

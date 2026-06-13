@@ -19,8 +19,20 @@ public class MembreRepository {
         return new ArrayList<>(membres.values());
     }
 
-    public Optional<Membre> findById(Long id) {
+    public Optional<Membre> findByMatricule(String matricule) {
+        return membres.values().stream()
+            .filter(m -> m.getMatricule().equals(matricule))
+            .findFirst();
+    }
+  public Optional<Membre> findById(Long id) {
         return Optional.ofNullable(membres.get(id));
+    }
+
+    // NM
+    public long countByType(Membre.TypeMembre type) {
+        return membres.values().stream()
+            .filter(m -> m.getType() == type)
+            .count();
     }
 
     public Membre save(Membre membre) {

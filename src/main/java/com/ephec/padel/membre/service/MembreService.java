@@ -20,12 +20,16 @@ public class MembreService {
         return membreRepository.findAll();
     }
 
-    public Membre getMembreById(Long id) {
-        return membreRepository.findById(id).
-        orElseThrow(() -> new RuntimeException("Membre introuvable avec id : " + id));
+     public Membre getMembreById(Long id) {
+        return membreRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException(
+                    "Membre introuvable avec id : " + id));
     }
 
     public Membre creerMembre(Membre membre){
+        // Générer le matricule automatiquement selon le type 
+        String matricule = genererMatricule(membre.getType());
+        membre.setMatricule(matricule);
         return membreRepository.save(membre);
     }
 
@@ -42,6 +46,18 @@ public class MembreService {
             throw new RuntimeException("Membre introuvable avec id : " + id);
         }
         membreRepository.deleteById(id);
+    }
+
+    // Génération automatique du matricule
+    private String genererMatricule(Membre.TypeMembre type) {
+        long count = membreRepository.countByType(type) +1; // On compte le nombre de membres du même type pour générer un matricule unique
+        String numero = String.format("%04d", count);
+
+       return switch (type) {
+         case GLOBAL -> "G" + numero;  
+         case SITE -> "S" + numero;
+         case LIBRE -> "L" + numero;
+};
     }
 
 }
