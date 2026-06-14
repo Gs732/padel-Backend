@@ -126,40 +126,83 @@ class ReservationServiceTest {
     // creerReservation
     // -------------------------------------------------------
     @Test
-    void creerReservation_should_set_statut_EN_ATTENTE_and_save_when_solde_positif() {
-        // Arrange
-        Reservation r = new Reservation(null, 1L, 1L, debut, fin, 20.0, null);
-        Reservation saved = new Reservation(1L, 1L, 1L, debut, fin, 20.0, "EN_ATTENTE");
-        Membre membre = new Membre(1L, "G0001", "Sako", "Georges", "g@gmail.com", "0467", 10.0, true, Membre.TypeMembre.GLOBAL);
+    void creerReservation_should_set_statut_EN_ATTENTE_and_save_when_solde_positif_and_delai_respecte() {
+    // Arrange
+    LocalDateTime debutFutur = LocalDateTime.now().plusDays(25); // > 21 jours pour GLOBAL
+    LocalDateTime finFutur = debutFutur.plusHours(1);
 
-        when(membreService.getMembreById(1L)).thenReturn(membre);
-        when(reservationRepository.save(any(Reservation.class))).thenReturn(saved);
+    Reservation r = new Reservation(null, 1L, 1L, debutFutur, finFutur, 20.0, null);
+    Reservation saved = new Reservation(1L, 1L, 1L, debutFutur, finFutur, 20.0, "EN_ATTENTE");
+    Membre membre = new Membre(1L, "G0001", "Sako", "Georges", "g@gmail.com", "0467", 10.0, true, Membre.TypeMembre.GLOBAL);
 
-        // Act
-        Reservation result = reservationService.creerReservation(r);
+    when(membreService.getMembreById(1L)).thenReturn(membre);
+    when(reservationRepository.save(any(Reservation.class))).thenReturn(saved);
 
-        // Assert
-        assertThat(result.getId()).isEqualTo(1L);
-        assertThat(result.getStatut()).isEqualTo("EN_ATTENTE");
-        verify(reservationRepository, times(1)).save(any(Reservation.class));
-    }
+    // Act
+    Reservation result = reservationService.creerReservation(r);
+
+    // Assert
+    assertThat(result.getId()).isEqualTo(1L);
+    assertThat(result.getStatut()).isEqualTo("EN_ATTENTE");
+    verify(reservationRepository, times(1)).save(any(Reservation.class));
+}
+
 
     @Test
     void creerReservation_should_throw_exception_when_solde_negatif() {
-        // Arrange
-        Reservation r = new Reservation(null, 1L, 1L, debut, fin, 20.0, null);
-        Membre membre = new Membre(1L, "G0001", "Sako", "Georges", "g@gmail.com", "0467", -15.0, true, Membre.TypeMembre.GLOBAL);
+    // Arrange
+    LocalDateTime debutFutur = LocalDateTime.now().plusDays(25);
+    LocalDateTime finFutur = debutFutur.plusHours(1);
 
-        when(membreService.getMembreById(1L)).thenReturn(membre);
+    Reservation r = new Reservation(null, 1L, 1L, debutFutur, finFutur, 20.0, null);
+    Membre membre = new Membre(1L, "G0001", "Sako", "Georges", "g@gmail.com", "0467", -15.0, true, Membre.TypeMembre.GLOBAL);
 
-        // Act & Assert
-        assertThatThrownBy(() -> reservationService.creerReservation(r))
-                .isInstanceOf(RuntimeException.class)
-                .hasMessageContaining("solde dû");
+    when(membreService.getMembreById(1L)).thenReturn(membre);
 
-        verify(reservationRepository, never()).save(any(Reservation.class));
-    }
+    // Act & Assert
+    assertThatThrownBy(() -> reservationService.creerReservation(r))
+            .isInstanceOf(RuntimeException.class)
+            .hasMessageContaining("solde dû");
 
+    verify(reservationRepository, never()).save(any(Reservation.class));
+}
+    @Test
+    void creerReservation_should_throw_exception_when_delai_non_respecte_global() {
+    // Arrange : membre GLOBAL doit réserver 21 jours avant, ici seulement 5 jours
+    LocalDateTime debutProche = LocalDateTime.now().plusDays(5);
+    LocalDateTime finProche = debutProche.plusHours(1);
+
+    Reservation r = new Reservation(null, 1L, 1L, debutProche, finProche, 20.0, null);
+    Membre membre = new Membre(1L, "G0001", "Sako", "Georges", "g@gmail.com", "0467", 10.0, true, Membre.TypeMembre.GLOBAL);
+
+    when(membreService.getMembreById(1L)).thenReturn(membre);
+
+    // Act & Assert
+    assertThatThrownBy(() -> reservationService.creerReservation(r))
+            .isInstanceOf(RuntimeException.class)
+            .hasMessageContaining("jours à l'avance");
+
+    verify(reservationRepository, never()).save(any(Reservation.class));
+}
+
+    @Test
+    void creerReservation_should_throw_exception_when_delai_non_respecte_libre() {
+    // Arrange : membre LIBRE doit réserver 5 jours avant, ici seulement 2 jours
+    LocalDateTime debutProche = LocalDateTime.now().plusDays(2);
+    LocalDateTime finProche = debutProche.plusHours(1);
+
+    Reservation r = new Reservation(null, 1L, 1L, debutProche, finProche, 20.0, null);
+    Membre membre = new Membre(1L, "L0001", "Sako", "Georges", "g@gmail.com", "0467", 10.0, true, Membre.TypeMembre.LIBRE);
+
+    when(membreService.getMembreById(1L)).thenReturn(membre);
+
+    // Act & Assert
+    assertThatThrownBy(() -> reservationService.creerReservation(r))
+            .isInstanceOf(RuntimeException.class)
+            .hasMessageContaining("jours à l'avance");
+
+    verify(reservationRepository, never()).save(any(Reservation.class));
+}
     // -------------------------------------------------------
     // annulerReservation
     // -------------------------------------------------------

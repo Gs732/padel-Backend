@@ -46,6 +46,23 @@ public class ReservationService {
         "' a un solde dû de " + membre.getSolde() + " €. " +
         "Veuillez régulariser le solde avant de réserver.");
 }
+    // Vérifier le délai de réservation selon le type de membre
+    long joursAvantReservation = java.time.Duration.between(
+            java.time.LocalDateTime.now(), reservation.getDateDebut()
+    ).toDays();
+
+    int delaiRequis = switch (membre.getType()) {
+        case GLOBAL -> 21; // 3 semaines
+        case SITE -> 14;   // 2 semaines
+        case LIBRE -> 5;   // 5 jours
+    };
+
+    if (joursAvantReservation < delaiRequis) {
+        throw new RuntimeException(
+            "Réservation impossible : le membre '" + membre.getMatricule() +
+            "' (" + membre.getType() + ") doit réserver au moins " +
+            delaiRequis + " jours à l'avance.");
+    }
         reservation.setStatut("EN_ATTENTE");
         return reservationRepository.save(reservation);
     }
