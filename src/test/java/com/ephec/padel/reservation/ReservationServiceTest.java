@@ -14,6 +14,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import com.ephec.padel.membre.model.Membre;
+import com.ephec.padel.membre.service.MembreService;
 import com.ephec.padel.reservation.model.Reservation;
 import com.ephec.padel.reservation.repository.ReservationRepository;
 import com.ephec.padel.reservation.service.ReservationService;
@@ -23,6 +25,9 @@ class ReservationServiceTest {
 
     @Mock
     private ReservationRepository reservationRepository;
+
+    @Mock
+    private MembreService membreService;
 
     @InjectMocks
     private ReservationService reservationService;
@@ -121,10 +126,13 @@ class ReservationServiceTest {
     // creerReservation
     // -------------------------------------------------------
     @Test
-    void creerReservation_should_set_statut_EN_ATTENTE_and_save() {
+    void creerReservation_should_set_statut_EN_ATTENTE_and_save_when_solde_positif() {
         // Arrange
         Reservation r = new Reservation(null, 1L, 1L, debut, fin, 20.0, null);
         Reservation saved = new Reservation(1L, 1L, 1L, debut, fin, 20.0, "EN_ATTENTE");
+        Membre membre = new Membre(1L, "G0001", "Sako", "Georges", "g@gmail.com", "0467", 10.0, true, Membre.TypeMembre.GLOBAL);
+
+        when(membreService.getMembreById(1L)).thenReturn(membre);
         when(reservationRepository.save(any(Reservation.class))).thenReturn(saved);
 
         // Act
@@ -134,6 +142,22 @@ class ReservationServiceTest {
         assertThat(result.getId()).isEqualTo(1L);
         assertThat(result.getStatut()).isEqualTo("EN_ATTENTE");
         verify(reservationRepository, times(1)).save(any(Reservation.class));
+    }
+
+    @Test
+    void creerReservation_should_throw_exception_when_solde_negatif() {
+        // Arrange
+        Reservation r = new Reservation(null, 1L, 1L, debut, fin, 20.0, null);
+        Membre membre = new Membre(1L, "G0001", "Sako", "Georges", "g@gmail.com", "0467", -15.0, true, Membre.TypeMembre.GLOBAL);
+
+        when(membreService.getMembreById(1L)).thenReturn(membre);
+
+        // Act & Assert
+        assertThatThrownBy(() -> reservationService.creerReservation(r))
+                .isInstanceOf(RuntimeException.class)
+                .hasMessageContaining("solde dû");
+
+        verify(reservationRepository, never()).save(any(Reservation.class));
     }
 
     // -------------------------------------------------------
