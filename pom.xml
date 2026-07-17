@@ -89,7 +89,15 @@
     <artifactId>spring-security-test</artifactId>
     <scope>test</scope>
 </dependency>
-	
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-data-jpa</artifactId>
+</dependency>
+<dependency>
+    <groupId>org.postgresql</groupId>
+    <artifactId>postgresql</artifactId>
+    <scope>runtime</scope>
+</dependency>
 </dependencies>
 
 	<build>
@@ -97,14 +105,13 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
-				<version>3.11.0</version>
 				<configuration>
 					<release>${java.version}</release>
 					<annotationProcessorPaths>
     <path>
         <groupId>org.projectlombok</groupId>
         <artifactId>lombok</artifactId>
-        <version>1.18.30</version>
+        <version>${lombok.version}</version>
     </path>
 </annotationProcessorPaths>
 				</configuration>
