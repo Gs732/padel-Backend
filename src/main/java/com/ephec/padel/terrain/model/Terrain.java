@@ -1,19 +1,35 @@
 package com.ephec.padel.terrain.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
+import com.ephec.padel.site.model.Site;
+import jakarta.persistence.*;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-@Data
+@Entity
+@Table(name = "terrain")
+@Getter
+@Setter
 @NoArgsConstructor
-@AllArgsConstructor
 public class Terrain {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String nom;
-    private String type;
-    private boolean interieur;
-    private boolean actif;
-    private Long siteId;
-}
 
+    @Column(nullable = false, length = 100)
+    private String nom;
+
+    @Column(length = 50)
+    private String type;
+
+    @Column(nullable = false)
+    private boolean interieur;
+
+    @Column(nullable = false)
+    private boolean actif = true;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "site_id", nullable = false)
+    private Site site;
+}

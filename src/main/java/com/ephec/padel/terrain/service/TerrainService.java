@@ -22,7 +22,7 @@ public class TerrainService {
     }
 
     public List<Terrain> getTerrainsBySiteId(Long siteId) {
-        return terrainRepository.findBySiteId(siteId);
+        return terrainRepository.findBySite_Id(siteId);
     }
 
     public Terrain getTerrainById(Long id) {
