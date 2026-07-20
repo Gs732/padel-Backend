@@ -1,53 +1,15 @@
 package com.ephec.padel.membre.repository;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
-import org.springframework.stereotype.Repository;
+import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.ephec.padel.membre.model.Membre;
+import com.ephec.padel.membre.model.TypeMembre;
 
-@Repository
-public class MembreRepository {
-    private final Map<Long, Membre> membres = new HashMap<>();
-    private long nextId = 1;
+public interface MembreRepository extends JpaRepository<Membre, Long> {
 
-    public List<Membre> findAll() {
-        return new ArrayList<>(membres.values());
-    }
+    Optional<Membre> findByMatricule(String matricule);
 
-    public Optional<Membre> findByMatricule(String matricule) {
-        return membres.values().stream()
-            .filter(m -> m.getMatricule().equals(matricule))
-            .findFirst();
-    }
-  public Optional<Membre> findById(Long id) {
-        return Optional.ofNullable(membres.get(id));
-    }
-
-    // NM
-    public long countByType(Membre.TypeMembre type) {
-        return membres.values().stream()
-            .filter(m -> m.getType() == type)
-            .count();
-    }
-
-    public Membre save(Membre membre) {
-        if (membre.getId() == null) {
-            membre.setId(nextId++);
-        }
-        membres.put(membre.getId(), membre); // On le sauvegard
-        return membre;
-    }
-
-    public void deleteById(Long id) {
-        membres.remove(id);
-    }
-
-    public boolean existsById (Long id) {
-        return membres.containsKey(id);
-    }
+    long countByType(TypeMembre type);
 }

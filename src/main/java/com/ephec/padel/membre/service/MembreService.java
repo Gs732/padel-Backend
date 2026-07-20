@@ -5,7 +5,8 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 
 import com.ephec.padel.membre.model.Membre;
-import com. ephec.padel.membre.repository.MembreRepository;
+import com.ephec.padel.membre.repository.MembreRepository;
+import com.ephec.padel.membre.model.TypeMembre;
 
 
 @Service
@@ -49,7 +50,7 @@ public class MembreService {
     }
 
     // Génération automatique du matricule
-    private String genererMatricule(Membre.TypeMembre type) {
+    private String genererMatricule(TypeMembre type) {
         long count = membreRepository.countByType(type) +1; // On compte le nombre de membres du même type pour générer un matricule unique
         String numero = String.format("%04d", count);
 
