@@ -12,4 +12,6 @@ public interface RencontreRepository extends JpaRepository<Rencontre, Long> {
     List<Rencontre> findByVisibilite(Visibilite visibilite);
 
     List<Rencontre> findByTerrain_Site_Id(Long siteId);
+
+    List<Rencontre> findByTerrain_Id(Long terrainId);
 }
