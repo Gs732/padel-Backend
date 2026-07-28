@@ -43,6 +43,9 @@ public class SecurityConfig {
             .authorizeHttpRequests(auth -> auth
                 // Routes publiques
                 .requestMatchers("/api/auth/**").permitAll()
+                /* .requestMatchers("/api/rencontres/**").permitAll()   // TEMPORAIRE - test DTO*/
+                .requestMatchers("/error").permitAll()
+
                 // Toutes les autres routes nécessitent une authentification
                 .anyRequest().authenticated()
             )

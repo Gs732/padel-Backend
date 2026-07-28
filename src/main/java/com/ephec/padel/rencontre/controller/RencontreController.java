@@ -11,9 +11,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.ephec.padel.rencontre.model.Rencontre;
+import com.ephec.padel.rencontre.dto.RencontreResponse;
 import com.ephec.padel.rencontre.model.Visibilite;
 import com.ephec.padel.rencontre.service.RencontreService;
+import com.ephec.padel.rencontre.dto.RencontreResponse;
 
 @RestController
 @RequestMapping("/api/rencontres")
@@ -25,26 +26,24 @@ public class RencontreController {
         this.rencontreService = rencontreService;
     }
 
-    @GetMapping
-    public ResponseEntity<List<Rencontre>> getAll() {
-        return ResponseEntity.ok(rencontreService.getAll());
+   @GetMapping
+    public ResponseEntity<List<RencontreResponse>> getAll() {
+        return ResponseEntity.ok(rencontreService.getAllResponses());
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Rencontre> getById(@PathVariable Long id) {
-        return ResponseEntity.ok(rencontreService.getById(id));
+    public ResponseEntity<RencontreResponse> getById(@PathVariable Long id) {
+        return ResponseEntity.ok(rencontreService.getByIdResponse(id));
     }
 
     @PostMapping
-    public ResponseEntity<Rencontre> creer(@RequestBody CreerRencontreRequest req) {
-        Rencontre rencontre = rencontreService.creerRencontre(
+    public ResponseEntity<RencontreResponse> creer(@RequestBody CreerRencontreRequest req) {
+        return ResponseEntity.ok(rencontreService.creerRencontreResponse(
                 req.organisateurId(),
                 req.terrainId(),
                 req.debut(),
-                req.visibilite());
-        return ResponseEntity.ok(rencontre);
+                req.visibilite()));
     }
-
     // Petit record pour recevoir les données du POST
     public record CreerRencontreRequest(
         Long organisateurId,

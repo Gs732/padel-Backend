@@ -6,12 +6,15 @@ import java.time.temporal.ChronoUnit;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.ephec.padel.creneau.model.CreneauDTO;
 import com.ephec.padel.creneau.service.CreneauService;
 import com.ephec.padel.membre.model.Membre;
 import com.ephec.padel.membre.model.TypeMembre;
 import com.ephec.padel.membre.repository.MembreRepository;
+import com.ephec.padel.participation.repository.ParticipationRepository;
+import com.ephec.padel.rencontre.dto.RencontreResponse;
 import com.ephec.padel.rencontre.model.Rencontre;
 import com.ephec.padel.rencontre.model.StatutRencontre;
 import com.ephec.padel.rencontre.model.Visibilite;
@@ -26,15 +29,18 @@ public class RencontreService {
     private final MembreRepository membreRepository;
     private final TerrainRepository terrainRepository;
     private final CreneauService creneauService;
+    private final ParticipationRepository participationRepository;
 
     public RencontreService(RencontreRepository rencontreRepository,
                             MembreRepository membreRepository,
                             TerrainRepository terrainRepository,
-                            CreneauService creneauService) {
+                            CreneauService creneauService,
+                            ParticipationRepository participationRepository) {
         this.rencontreRepository = rencontreRepository;
         this.membreRepository = membreRepository;
         this.terrainRepository = terrainRepository;
         this.creneauService = creneauService;
+        this.participationRepository = participationRepository;
     }
 
     public List<Rencontre> getAll() {
@@ -48,10 +54,6 @@ public class RencontreService {
 
     /**
      * Crée une rencontre en vérifiant les 5 règles métier.
-     * @param organisateurId le membre qui organise
-     * @param terrainId le terrain choisi
-     * @param debut le créneau (date + heure de début)
-     * @param visibilite PRIVE ou PUBLIC
      */
     public Rencontre creerRencontre(Long organisateurId, Long terrainId,
                                     LocalDateTime debut, Visibilite visibilite) {
@@ -120,5 +122,40 @@ public class RencontreService {
         rencontre.setPrixTotal(60);
 
         return rencontreRepository.save(rencontre);
+    }
+
+    @Transactional
+    public RencontreResponse creerRencontreResponse(Long organisateurId, Long terrainId,
+                                                     LocalDateTime debut, Visibilite visibilite) {
+        Rencontre rencontre = creerRencontre(organisateurId, terrainId, debut, visibilite);
+        return toResponse(rencontre);
+    }
+
+    // --- Mapping entité -> DTO ---
+    public RencontreResponse toResponse(Rencontre r) {
+        long nbJoueurs = participationRepository.countByRencontre_Id(r.getId());
+        return new RencontreResponse(
+            r.getId(),
+            r.getTerrain().getNom(),
+            r.getTerrain().getSite().getNom(),
+            r.getOrganisateur().getNom() + " " + r.getOrganisateur().getPrenom(),
+            r.getDebut(),
+            r.getVisibilite(),
+            r.getStatut(),
+            r.getPrixTotal(),
+            nbJoueurs
+        );
+    }
+
+    @Transactional(readOnly = true)
+    public List<RencontreResponse> getAllResponses() {
+        return rencontreRepository.findAll().stream()
+                .map(this::toResponse)
+                .toList();
+    }
+
+    @Transactional(readOnly = true)
+    public RencontreResponse getByIdResponse(Long id) {
+        return toResponse(getById(id));
     }
 }
