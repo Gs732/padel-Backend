@@ -3,62 +3,108 @@ package com.ephec.padel.membre.service;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import com.ephec.padel.membre.dto.CreerMembreRequest;
+import com.ephec.padel.membre.dto.MembreResponse;
 import com.ephec.padel.membre.model.Membre;
-import com.ephec.padel.membre.repository.MembreRepository;
 import com.ephec.padel.membre.model.TypeMembre;
-
+import com.ephec.padel.membre.repository.MembreRepository;
+import com.ephec.padel.site.model.Site;
+import com.ephec.padel.site.repository.SiteRepository;
 
 @Service
 public class MembreService {
+
     private final MembreRepository membreRepository;
+    private final SiteRepository siteRepository;
 
-    public MembreService(MembreRepository membreRepository) {
+    public MembreService(MembreRepository membreRepository,
+                         SiteRepository siteRepository) {
         this.membreRepository = membreRepository;
+        this.siteRepository = siteRepository;
     }
 
-    public List<Membre> getAllMembres() {
-        return membreRepository.findAll();
+    @Transactional(readOnly = true)
+    public List<MembreResponse> getAllResponses() {
+        return membreRepository.findAll().stream()
+                .map(this::toResponse)
+                .toList();
     }
 
-     public Membre getMembreById(Long id) {
-        return membreRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException(
-                    "Membre introuvable avec id : " + id));
+    @Transactional(readOnly = true)
+    public MembreResponse getByIdResponse(Long id) {
+        Membre membre = membreRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Membre introuvable avec id : " + id));
+        return toResponse(membre);
     }
 
-    public Membre creerMembre(Membre membre){
-        // Générer le matricule automatiquement selon le type 
-        String matricule = genererMatricule(membre.getType());
-        membre.setMatricule(matricule);
-        return membreRepository.save(membre);
-    }
-
-    public Membre modifierMembre(Long id, Membre membre) {
-        if (!membreRepository.existsById(id)) {
-            throw new RuntimeException("Membre introuvable avec id : " + id);
+    @Transactional
+    public MembreResponse creerMembre(CreerMembreRequest req) {
+        // --- Validation : cohérence type <-> site ---
+        if (req.type() == TypeMembre.SITE && req.siteId() == null) {
+            throw new RuntimeException("Un membre SITE doit etre rattache a un site.");
         }
-        membre.setId(id);
-        return membreRepository.save(membre);
+        if (req.type() != TypeMembre.SITE && req.siteId() != null) {
+            throw new RuntimeException(
+                "Un membre " + req.type() + " ne peut pas etre rattache a un site.");
+        }
+
+        Membre membre = new Membre();
+        membre.setNom(req.nom());
+        membre.setPrenom(req.prenom());
+        membre.setEmail(req.email());
+        membre.setTelephone(req.telephone());
+        membre.setType(req.type());
+        membre.setSolde(0);
+        membre.setActif(true);
+
+        // Rattacher le site pour un membre SITE
+        if (req.type() == TypeMembre.SITE) {
+            Site site = siteRepository.findById(req.siteId())
+                    .orElseThrow(() -> new RuntimeException("Site introuvable : " + req.siteId()));
+            membre.setSite(site);
+        }
+
+        // Générer le matricule selon le type
+        membre.setMatricule(genererMatricule(req.type()));
+
+        return toResponse(membreRepository.save(membre));
     }
 
+    @Transactional
     public void supprimerMembre(Long id) {
-        if (!membreRepository.existsById(id)){
+        if (!membreRepository.existsById(id)) {
             throw new RuntimeException("Membre introuvable avec id : " + id);
         }
         membreRepository.deleteById(id);
     }
 
-    // Génération automatique du matricule
-    private String genererMatricule(TypeMembre type) {
-        long count = membreRepository.countByType(type) +1; // On compte le nombre de membres du même type pour générer un matricule unique
-        String numero = String.format("%04d", count);
-
-       return switch (type) {
-         case GLOBAL -> "G" + numero;  
-         case SITE -> "S" + numero;
-         case LIBRE -> "L" + numero;
-};
+    // --- Mapping entité -> DTO ---
+    private MembreResponse toResponse(Membre m) {
+        String siteNom = (m.getSite() != null) ? m.getSite().getNom() : null;
+        return new MembreResponse(
+            m.getId(),
+            m.getMatricule(),
+            m.getNom(),
+            m.getPrenom(),
+            m.getEmail(),
+            m.getTelephone(),
+            m.getSolde(),
+            m.isActif(),
+            m.getType(),
+            siteNom
+        );
     }
 
+    // --- Génération automatique du matricule ---
+    private String genererMatricule(TypeMembre type) {
+        long count = membreRepository.countByType(type) + 1;
+        String numero = String.format("%04d", count);
+        return switch (type) {
+            case GLOBAL -> "G" + numero;
+            case SITE -> "S" + numero;
+            case LIBRE -> "L" + numero;
+        };
+    }
 }
