@@ -8,18 +8,18 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.ephec.padel.terrain.model.Terrain;
+import com.ephec.padel.terrain.dto.CreerTerrainRequest;
+import com.ephec.padel.terrain.dto.TerrainResponse;
 import com.ephec.padel.terrain.service.TerrainService;
 
 @RestController
 @RequestMapping("/api/terrains")
 public class TerrainController {
-    
+
     private final TerrainService terrainService;
 
     public TerrainController(TerrainService terrainService) {
@@ -27,34 +27,28 @@ public class TerrainController {
     }
 
     @GetMapping
-    public ResponseEntity<List<Terrain>> getAllTerrains() {
-        return ResponseEntity.ok(terrainService.getAllTerrains());
+    public ResponseEntity<List<TerrainResponse>> getAllTerrains() {
+        return ResponseEntity.ok(terrainService.getAllResponses());
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Terrain> getTerrainById(@PathVariable Long id) {
-        return ResponseEntity.ok(terrainService.getTerrainById(id));
+    public ResponseEntity<TerrainResponse> getTerrainById(@PathVariable Long id) {
+        return ResponseEntity.ok(terrainService.getByIdResponse(id));
     }
 
     @GetMapping("/site/{siteId}")
-    public ResponseEntity<List<Terrain>> getTerrainsBySiteId(@PathVariable Long siteId) {
-        return ResponseEntity.ok(terrainService.getTerrainsBySiteId(siteId));
-
+    public ResponseEntity<List<TerrainResponse>> getTerrainsBySiteId(@PathVariable Long siteId) {
+        return ResponseEntity.ok(terrainService.getBySiteIdResponses(siteId));
     }
 
     @PostMapping
-    public ResponseEntity<Terrain> creerTerrain(@RequestBody Terrain terrain) {
+    public ResponseEntity<TerrainResponse> creerTerrain(@RequestBody CreerTerrainRequest req) {
         return ResponseEntity.status(HttpStatus.CREATED)
-            .body(terrainService.creerTerrain(terrain));
-    }
-
-    @PutMapping("/{id}")
-    public ResponseEntity<Terrain> modifierTerrain(@PathVariable Long id, @RequestBody Terrain terrain) {
-        return ResponseEntity.ok(terrainService.modifierTerrain(id, terrain));
+                .body(terrainService.creerTerrain(req));
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> supprimerTerrain(@PathVariable Long id){
+    public ResponseEntity<Void> supprimerTerrain(@PathVariable Long id) {
         terrainService.supprimerTerrain(id);
         return ResponseEntity.noContent().build();
     }
