@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.ephec.padel.exception.NotFoundException;
 import com.ephec.padel.site.model.Site;
 import com.ephec.padel.site.repository.SiteRepository;
 import com.ephec.padel.terrain.dto.CreerTerrainRequest;
@@ -34,7 +35,7 @@ public class TerrainService {
     @Transactional(readOnly = true)
     public TerrainResponse getByIdResponse(Long id) {
         Terrain terrain = terrainRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Terrain introuvable : " + id));
+                .orElseThrow(() -> new NotFoundException("Terrain introuvable : " + id));
         return toResponse(terrain);
     }
 
@@ -48,7 +49,7 @@ public class TerrainService {
     @Transactional
     public TerrainResponse creerTerrain(CreerTerrainRequest req) {
         Site site = siteRepository.findById(req.siteId())
-                .orElseThrow(() -> new RuntimeException("Site introuvable : " + req.siteId()));
+                .orElseThrow(() -> new NotFoundException("Site introuvable : " + req.siteId()));
 
         Terrain terrain = new Terrain();
         terrain.setNom(req.nom());
@@ -63,7 +64,7 @@ public class TerrainService {
     @Transactional
     public void supprimerTerrain(Long id) {
         if (!terrainRepository.existsById(id)) {
-            throw new RuntimeException("Terrain introuvable : " + id);
+            throw new NotFoundException("Terrain introuvable : " + id);
         }
         terrainRepository.deleteById(id);
     }

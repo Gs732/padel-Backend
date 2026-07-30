@@ -10,6 +10,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.ephec.padel.creneau.model.CreneauDTO;
 import com.ephec.padel.creneau.service.CreneauService;
+import com.ephec.padel.exception.BadRequestException;
+import com.ephec.padel.exception.NotFoundException;
 import com.ephec.padel.membre.model.Membre;
 import com.ephec.padel.membre.model.TypeMembre;
 import com.ephec.padel.membre.repository.MembreRepository;
@@ -49,7 +51,7 @@ public class RencontreService {
 
     public Rencontre getById(Long id) {
         return rencontreRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Rencontre introuvable : " + id));
+                .orElseThrow(() -> new NotFoundException("Rencontre introuvable : " + id));
     }
 
     /**
@@ -59,14 +61,14 @@ public class RencontreService {
                                     LocalDateTime debut, Visibilite visibilite) {
 
         Membre organisateur = membreRepository.findById(organisateurId)
-                .orElseThrow(() -> new RuntimeException("Membre introuvable : " + organisateurId));
+                .orElseThrow(() -> new NotFoundException("Membre introuvable : " + organisateurId));
 
         Terrain terrain = terrainRepository.findById(terrainId)
-                .orElseThrow(() -> new RuntimeException("Terrain introuvable : " + terrainId));
+                .orElseThrow(() -> new NotFoundException("Terrain introuvable : " + terrainId));
 
         // --- Règle 1 : solde à jour ---
         if (organisateur.getSolde() < 0) {
-            throw new RuntimeException(
+            throw new BadRequestException(
                 "Reservation impossible : le membre " + organisateur.getMatricule() +
                 " a un solde du de " + organisateur.getSolde() + " EUR.");
         }
@@ -74,7 +76,7 @@ public class RencontreService {
         // --- Règle 2 : pas de pénalité en cours ---
         LocalDate penalise = organisateur.getPenaliseJusquAu();
         if (penalise != null && penalise.isAfter(LocalDate.now())) {
-            throw new RuntimeException(
+            throw new BadRequestException(
                 "Reservation impossible : le membre " + organisateur.getMatricule() +
                 " est penalise jusqu'au " + penalise + ".");
         }
@@ -87,7 +89,7 @@ public class RencontreService {
             case LIBRE -> 5;
         };
         if (joursAvant < delaiRequis) {
-            throw new RuntimeException(
+            throw new BadRequestException(
                 "Reservation impossible : un membre " + organisateur.getType() +
                 " doit reserver au moins " + delaiRequis + " jours a l'avance.");
         }
@@ -97,7 +99,7 @@ public class RencontreService {
             Long siteMembre = organisateur.getSite() != null ? organisateur.getSite().getId() : null;
             Long siteTerrain = terrain.getSite().getId();
             if (!siteTerrain.equals(siteMembre)) {
-                throw new RuntimeException(
+                throw new BadRequestException(
                     "Reservation impossible : le membre SITE " + organisateur.getMatricule() +
                     " ne peut reserver que sur son site.");
             }
@@ -108,7 +110,7 @@ public class RencontreService {
         boolean creneauValide = creneaux.stream()
                 .anyMatch(c -> c.debut().equals(debut) && c.disponible());
         if (!creneauValide) {
-            throw new RuntimeException(
+            throw new BadRequestException(
                 "Reservation impossible : aucun creneau libre a " + debut + " sur ce terrain.");
         }
 

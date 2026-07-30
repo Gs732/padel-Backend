@@ -44,6 +44,7 @@ public class SecurityConfig {
                 // Routes publiques
                 .requestMatchers("/api/auth/**").permitAll()
                 .requestMatchers("/api/terrains/**").permitAll()   // TEMPORAIRE - test DTO
+                .requestMatchers("/api/membres/**").permitAll()   // TEMPORAIRE - test
               /*.requestMatchers("/api/membres/**").permitAll()   // TEMPORAIRE - test DTO */
                 .requestMatchers("/error").permitAll()
 

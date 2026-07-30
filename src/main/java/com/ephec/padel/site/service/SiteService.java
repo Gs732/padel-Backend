@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
+import com.ephec.padel.exception.NotFoundException;
 import com.ephec.padel.site.model.Site;
 import com.ephec.padel.site.repository.SiteRepository;
 
@@ -21,7 +22,7 @@ public List<Site> getAllSites(){
 
 public Site getSiteById(Long id) {
     return siteRepository.findById(id).orElseThrow(() ->
-    new RuntimeException("Site introuvable avec id : " + id));
+    new NotFoundException("Site introuvable avec id : " + id));
 }
 
 public Site creerSite(Site site) {
@@ -30,7 +31,7 @@ public Site creerSite(Site site) {
 
 public Site modifierSite(Long id, Site site) {
         if (!siteRepository.existsById(id)) {
-            throw new RuntimeException("Site introuvable avec id : " + id);
+            throw new NotFoundException("Site introuvable avec id : " + id);
         }
         site.setId(id);
         return siteRepository.save(site);
@@ -38,7 +39,7 @@ public Site modifierSite(Long id, Site site) {
 
 public void supprimerSite(Long id) {
     if (!siteRepository.existsById(id)) {
-        throw new RuntimeException(new RuntimeException("Site introuvable avec id : " + id));
+        throw new NotFoundException("Site introuvable avec id : " + id);
 
     }
     siteRepository.deleteById(id);

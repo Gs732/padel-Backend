@@ -5,6 +5,8 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.ephec.padel.exception.BadRequestException;
+import com.ephec.padel.exception.NotFoundException;
 import com.ephec.padel.membre.dto.CreerMembreRequest;
 import com.ephec.padel.membre.dto.MembreResponse;
 import com.ephec.padel.membre.model.Membre;
@@ -35,7 +37,7 @@ public class MembreService {
     @Transactional(readOnly = true)
     public MembreResponse getByIdResponse(Long id) {
         Membre membre = membreRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Membre introuvable avec id : " + id));
+                .orElseThrow(() -> new NotFoundException("Membre introuvable avec id : " + id));
         return toResponse(membre);
     }
 
@@ -43,10 +45,10 @@ public class MembreService {
     public MembreResponse creerMembre(CreerMembreRequest req) {
         // --- Validation : cohérence type <-> site ---
         if (req.type() == TypeMembre.SITE && req.siteId() == null) {
-            throw new RuntimeException("Un membre SITE doit etre rattache a un site.");
+            throw new BadRequestException("Un membre SITE doit etre rattache a un site.");
         }
         if (req.type() != TypeMembre.SITE && req.siteId() != null) {
-            throw new RuntimeException(
+            throw new BadRequestException(
                 "Un membre " + req.type() + " ne peut pas etre rattache a un site.");
         }
 
@@ -62,7 +64,7 @@ public class MembreService {
         // Rattacher le site pour un membre SITE
         if (req.type() == TypeMembre.SITE) {
             Site site = siteRepository.findById(req.siteId())
-                    .orElseThrow(() -> new RuntimeException("Site introuvable : " + req.siteId()));
+                    .orElseThrow(() -> new NotFoundException("Site introuvable : " + req.siteId()));
             membre.setSite(site);
         }
 
@@ -75,7 +77,7 @@ public class MembreService {
     @Transactional
     public void supprimerMembre(Long id) {
         if (!membreRepository.existsById(id)) {
-            throw new RuntimeException("Membre introuvable avec id : " + id);
+            throw new NotFoundException("Membre introuvable avec id : " + id);
         }
         membreRepository.deleteById(id);
     }
