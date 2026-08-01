@@ -41,4 +41,7 @@ public class Rencontre {
 
     @Column(name = "prix_total", nullable = false)
     private double prixTotal = 60;
+
+    @OneToMany(mappedBy = "rencontre", fetch = FetchType.LAZY)
+    private java.util.List<com.ephec.padel.participation.model.Participation> participations = new java.util.ArrayList<>();
 }
