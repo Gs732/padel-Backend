@@ -47,7 +47,10 @@ public class SecurityConfig {
               /*.requestMatchers("/api/rencontres/**").permitAll()       // TEMPORAIRE - test */  
               /*  .requestMatchers("/api/terrains/**").permitAll()   // TEMPORAIRE - test DTO  */
               /*.requestMatchers("/api/membres/**").permitAll()   // TEMPORAIRE - test DTO */
-                .requestMatchers("/error").permitAll()
+             /*  .requestMatchers("/api/participations/**").permitAll()   // TEMPORAIRE
+              .requestMatchers("/api/paiements/**").permitAll()        // TEMPORAIRE
+              .requestMatchers("/api/rencontres/**").permitAll()       // TEMPORAIRE
+              .requestMatchers("/error").permitAll()*/
 
                 // Toutes les autres routes nécessitent une authentification
                 .anyRequest().authenticated()

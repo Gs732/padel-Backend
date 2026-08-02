@@ -13,4 +13,6 @@ public interface ParticipationRepository extends JpaRepository<Participation, Lo
     List<Participation> findByRencontre_IdOrderByDateInscriptionAsc(Long rencontreId);
 
     boolean existsByRencontre_IdAndMembre_Id(Long rencontreId, Long membreId);
+
+    long countByRencontre_IdAndPayeTrue(Long rencontreId);
 }
