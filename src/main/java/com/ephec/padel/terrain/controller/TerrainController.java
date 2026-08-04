@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.ephec.padel.terrain.dto.CreerTerrainRequest;
 import com.ephec.padel.terrain.dto.TerrainResponse;
 import com.ephec.padel.terrain.service.TerrainService;
+import org.springframework.security.access.prepost.PreAuthorize;
 
 @RestController
 @RequestMapping("/api/terrains")
@@ -42,12 +44,14 @@ public class TerrainController {
     }
 
     @PostMapping
+    @PreAuthorize("hasRole('ADMIN_GLOBAL')")
     public ResponseEntity<TerrainResponse> creerTerrain(@RequestBody CreerTerrainRequest req) {
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(terrainService.creerTerrain(req));
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN_GLOBAL')")
     public ResponseEntity<Void> supprimerTerrain(@PathVariable Long id) {
         terrainService.supprimerTerrain(id);
         return ResponseEntity.noContent().build();

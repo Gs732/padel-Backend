@@ -21,13 +21,21 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     public UserDetailsServiceImpl() {
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 
-        // Création de 2 utilisateurs par défaut
+        // Admin global : gère tout
         users.put("admin", User.builder()
                 .username("admin")
                 .password(encoder.encode("admin123"))
-                .roles("ADMIN")
+                .roles("ADMIN_GLOBAL")
                 .build());
 
+        // Admin de site : ne gère que son site (ici le site 1)
+        users.put("admin_site", User.builder()
+                .username("admin_site")
+                .password(encoder.encode("site123"))
+                .roles("ADMIN_SITE")
+                .build());
+
+        // Utilisateur normal
         users.put("user", User.builder()
                 .username("user")
                 .password(encoder.encode("user123"))

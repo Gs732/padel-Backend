@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.access.prepost.PreAuthorize;
+
 
 import com.ephec.padel.site.model.Site;
 import com.ephec.padel.site.service.SiteService;
@@ -37,6 +39,7 @@ public class SiteController {
     }
 
     @PostMapping
+    @PreAuthorize("hasRole('ADMIN_GLOBAL')")
     public ResponseEntity<Site> creerSite(@RequestBody Site site) {
         return ResponseEntity.status(HttpStatus.CREATED).body(siteService.creerSite(site));
 
@@ -49,6 +52,7 @@ public class SiteController {
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN_GLOBAL')")
     public ResponseEntity<Void> supprimerSite(@PathVariable Long id) {
         siteService.supprimerSite(id);
         return ResponseEntity.noContent().build();

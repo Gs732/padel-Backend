@@ -9,4 +9,5 @@ public record ParticipationResponse(
     String membreNom,
     boolean paye,
     LocalDateTime dateInscription
+    
 ) {}
