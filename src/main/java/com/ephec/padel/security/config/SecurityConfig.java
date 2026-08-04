@@ -46,6 +46,8 @@ public class SecurityConfig {
             .authorizeHttpRequests(auth -> auth
                 // Routes publiques
                 .requestMatchers("/api/auth/**").permitAll()
+                .requestMatchers("/error").permitAll()
+                .requestMatchers("/swagger-ui/**", "/swagger-ui.html", "/v3/api-docs/**").permitAll()
                /*.requestMatchers("/api/participations/**").permitAll()   // TEMPORAIRE - test */ 
               /*.requestMatchers("/api/rencontres/**").permitAll()       // TEMPORAIRE - test */  
               /*  .requestMatchers("/api/terrains/**").permitAll()   // TEMPORAIRE - test DTO  */
