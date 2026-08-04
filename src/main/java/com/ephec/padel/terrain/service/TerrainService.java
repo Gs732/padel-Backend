@@ -12,17 +12,22 @@ import com.ephec.padel.terrain.dto.CreerTerrainRequest;
 import com.ephec.padel.terrain.dto.TerrainResponse;
 import com.ephec.padel.terrain.model.Terrain;
 import com.ephec.padel.terrain.repository.TerrainRepository;
+import com.ephec.padel.exception.BadRequestException;
+import com.ephec.padel.security.service.AdminSiteResolver;
 
 @Service
 public class TerrainService {
 
     private final TerrainRepository terrainRepository;
     private final SiteRepository siteRepository;
+    private final AdminSiteResolver adminSiteResolver;
 
     public TerrainService(TerrainRepository terrainRepository,
-                          SiteRepository siteRepository) {
+                          SiteRepository siteRepository,
+                          AdminSiteResolver adminSiteResolver) {
         this.terrainRepository = terrainRepository;
         this.siteRepository = siteRepository;
+        this.adminSiteResolver = adminSiteResolver; 
     }
 
     @Transactional(readOnly = true)
@@ -68,7 +73,30 @@ public class TerrainService {
         }
         terrainRepository.deleteById(id);
     }
+    @Transactional
+    public TerrainResponse modifierTerrain(Long terrainId, CreerTerrainRequest req) {
+        Terrain terrain = terrainRepository.findById(terrainId)
+                .orElseThrow(() -> new NotFoundException("Terrain introuvable : " + terrainId));
 
+        // --- Vérification de périmètre (niveau 2) ---
+        // Un ADMIN_GLOBAL peut tout modifier.
+        // Un ADMIN_SITE ne peut modifier qu'un terrain de SON site.
+        if (!adminSiteResolver.isAdminGlobal()) {
+            Long siteAdmin = adminSiteResolver.getSiteIdOfCurrentAdmin();
+            Long siteTerrain = terrain.getSite().getId();
+            if (siteAdmin == null || !siteAdmin.equals(siteTerrain)) {
+                throw new BadRequestException(
+                    "Acces refuse : vous ne gerez pas le site de ce terrain.");
+            }
+        }
+
+        // Modification autorisée
+        terrain.setNom(req.nom());
+        terrain.setType(req.type());
+        terrain.setInterieur(req.interieur());
+
+        return toResponse(terrainRepository.save(terrain));
+    }
     // --- Mapping entité -> DTO ---
     private TerrainResponse toResponse(Terrain t) {
         return new TerrainResponse(
