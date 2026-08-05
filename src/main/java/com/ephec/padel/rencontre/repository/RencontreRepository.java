@@ -17,4 +17,6 @@ public interface RencontreRepository extends JpaRepository<Rencontre, Long> {
     List<Rencontre> findByTerrain_Id(Long terrainId);
 
     boolean existsByTerrain_IdAndDebut(Long terrainId, LocalDateTime debut);
+
+    long countByTerrain_Site_Id(Long siteId);
 }
